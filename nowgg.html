@@ -188,7 +188,7 @@
 
         .start-button {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-             font-family: "Roboto Mono", monospace;
+            font-family: "Roboto Mono", monospace;
             color: white;
             border: none;
             padding: 18px 55px;
@@ -218,12 +218,161 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        /* Clipboard Tool */
+        .clipboard-tool {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .clipboard-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clipboard-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .clipboard-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .clipboard-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .clipboard-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .clipboard-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .close-btn {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .close-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 3000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .logo-text { font-size: 40px; }
             .subtitle { font-size: 18px; }
             .start-button { font-size: 22px; padding: 16px 45px; }
             .logo-img { width: 85px; }
+            .clipboard-button {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            .modal-content {
+                padding: 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -267,6 +416,35 @@
         <div class="footer">Created by HoangRoblox</div>
     </div>
 
+    <!-- Clipboard Tool -->
+    <div class="clipboard-tool">
+        <button class="clipboard-button" onclick="openClipboard()">
+            <svg class="clipboard-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            </svg>
+            Clipboard
+        </button>
+    </div>
+
+    <!-- Clipboard Modal -->
+    <div class="clipboard-modal" id="clipboardModal">
+        <div class="modal-content">
+            <div class="modal-header">📋 Clipboard Sync</div>
+            <textarea class="clipboard-textarea" id="clipboardText" placeholder="Dán text/link của bạn vào đây để sync với máy ảo..."></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn copy-btn" onclick="copyToClipboard()">
+                    📋 Copy
+                </button>
+                <button class="modal-btn close-btn" onclick="closeClipboard()">
+                    ✖ Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">✅ Đã copy vào clipboard!</div>
+
     <script>
         function handleStart() {
             const button = document.querySelector('.start-button');
@@ -276,7 +454,35 @@
                 window.location.href = "https://now.gg/"; // 👉 thay link này bằng trang bạn muốn
             }, 150);
         }
-        
+
+        function openClipboard() {
+            document.getElementById('clipboardModal').classList.add('active');
+            loadCurrentClipboard();
+        }
+
+        function closeClipboard() {
+            document.getElementById('clipboardModal').classList.remove('active');
+        }
+
+        async function copyToClipboard() {
+            const text = document.getElementById('clipboardText').value;
+            if (text.trim() === '') {
+                alert('⚠️ Vui lòng nhập nội dung cần copy!');
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(text);
+                showNotification();
+            } catch (err) {
+                // Fallback cho các trình duyệt cũ
+                const textarea = document.getElementById('clipboardText');
+                textarea.select();
+                document.execCommand('copy');
+                showNotification();
+            }
+        }
+
         function showNotification() {
             const notification = document.getElementById('notification');
             notification.classList.add('show');
@@ -301,10 +507,6 @@
                 console.log('Không thể đọc clipboard');
             }
         }
-
-        // Load clipboard khi click vào button
-        document.querySelector('.clipboard-button').addEventListener('click', loadCurrentClipboard);
-
     </script>
 </body>
 </html>
