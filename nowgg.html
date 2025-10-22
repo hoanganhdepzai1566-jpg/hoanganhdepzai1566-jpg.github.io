@@ -252,7 +252,7 @@
 
         <div class="main-card">
             <div class="logo-container">
-                <img src="icon.jpg" alt="Now.gg Logo" class="logo-img">
+                <img src="288040457_397859942365664_5280719510344257990_n-removebg-preview.png" alt="Now.gg Logo" class="logo-img">
                 <div class="logo-text">now.<span class="gg">gg</span></div>
                 <div class="subtitle">Mobile Cloud</div>
             </div>
@@ -273,9 +273,37 @@
             button.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 button.style.transform = 'scale(1)';
-                window.location.href = "https://hosted-3.now.gg/play/now-gg/5880_t1/greedy-snake"; // 👉 thay link này bằng trang bạn muốn
+                window.location.href = "https://now.gg/"; // 👉 thay link này bằng trang bạn muốn
             }, 150);
         }
+        
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        // Auto-load clipboard khi mở modal
+        document.getElementById('clipboardModal').addEventListener('click', async function(e) {
+            if (e.target === this) {
+                closeClipboard();
+            }
+        });
+
+        // Tự động paste clipboard hiện tại khi mở
+        async function loadCurrentClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('clipboardText').value = text;
+            } catch (err) {
+                console.log('Không thể đọc clipboard');
+            }
+        }
+
+        // Load clipboard khi click vào button
+        document.querySelector('.clipboard-button').addEventListener('click', loadCurrentClipboard);
 
     </script>
 </body>
